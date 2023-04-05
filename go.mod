@@ -1,4 +1,4 @@
-module desktop-app
+module desktop-web-app
 
 go 1.20
 

@@ -2,9 +2,9 @@ package main
 
 import (
 	"context"
-	"desktop-app/assets"
-	"desktop-app/backend"
-	"desktop-app/mainWindow"
+	"desktop-web-app/assets"
+	"desktop-web-app/backend"
+	"desktop-web-app/mainWindow"
 	"embed"
 	"fmt"
 	"github.com/go-chi/chi/v5"
