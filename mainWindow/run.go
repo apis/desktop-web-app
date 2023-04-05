@@ -7,8 +7,10 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-const windowWidth = 10000
-const windowHeight = 10000
+const windowLeft = 0
+const windowTop = 0
+const windowWidth = 800
+const windowHeight = 600
 
 func Run(host string, port int, uiPrefix string, log *logrus.Logger) {
 	log.Infof("Starting main window\n")
@@ -27,10 +29,11 @@ func Run(host string, port int, uiPrefix string, log *logrus.Logger) {
 		//chromedp.Flag("app", true),
 		//chromedp.Flag("app", "data:text/html,<html><body><script>window.moveTo(580,240);window.resizeTo(800,600);window.location='http://ibm.com';</script></body></html>"),
 		//chromedp.Flag("app", "data:text/html,<title>TEST</title>"),
-		chromedp.Flag("app", "data:text/html,<title>App</title><style>html{background: #000000;}</style>"),
+		chromedp.Flag("app", "data:text/html,<title>App</title><style>html{background: #0000FF;}</style>"),
 		//chromedp.Flag("app", "data:text/html,<title>&lrm;</title>"),
-		chromedp.Flag("window-size", "7800,7600"),
-		chromedp.Flag("window-position", "100,200"),
+		//	chromedp.Flag("window-size", fmt.Sprintf("%d,%d", windowWidth, windowHeight)),
+		//	chromedp.Flag("window-position", fmt.Sprintf("%d,%d", windowLeft, windowTop)),
+		chromedp.Flag("start-maximized", true),
 	}
 
 	allocatorContext, _ := chromedp.NewExecAllocator(context.Background(), opts...)
