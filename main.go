@@ -2,9 +2,9 @@ package main
 
 import (
 	"context"
-	"desktop-web-app/assets"
 	"desktop-web-app/backend"
 	"desktop-web-app/mainWindow"
+	"desktop-web-app/staticAssets"
 	"embed"
 	"fmt"
 	"github.com/go-chi/chi/v5"
@@ -54,7 +54,7 @@ func main() {
 	router := chi.NewRouter()
 	router.Use(middleware.Logger)
 	router.Mount(apiUrlPrefix, backend.Router(log))
-	router.Handle(uiUrlPrefix+"*", assets.Handler(embedFs, embedFsRoot, uiUrlPrefix, defaultUiUrl))
+	router.Handle(uiUrlPrefix+"*", staticAssets.Handler(embedFs, embedFsRoot, uiUrlPrefix, defaultUiUrl))
 
 	server := &http.Server{
 		Handler: router,
