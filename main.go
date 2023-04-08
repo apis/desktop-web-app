@@ -21,10 +21,11 @@ const localHost = "127.0.0.1"
 const anyPort = 0
 const uiUrlPrefix = "/ui"
 const apiUrlPrefix = "/api"
-const resourcesRoot = "frontend/dist"
+const embedFsRoot = "frontend/dist"
+const defaultUiUrl = "index.html"
 
 //go:embed frontend/dist
-var resources embed.FS
+var embedFs embed.FS
 
 var log *logrus.Logger
 
@@ -46,14 +47,14 @@ func main() {
 			fmt.Errorf("%w", err))
 	}
 
-	actualPort := listener.Addr().(*net.TCPAddr).Port
+	ephemeralPort := listener.Addr().(*net.TCPAddr).Port
 
-	log.Infof("Actual port: %d\n", actualPort)
+	log.Infof("Ephemeral port: %d\n", ephemeralPort)
 
 	router := chi.NewRouter()
 	router.Use(middleware.Logger)
 	router.Mount(apiUrlPrefix, backend.Router(log))
-	router.Handle(uiUrlPrefix+"*", assets.Handler(resources, uiUrlPrefix, resourcesRoot))
+	router.Handle(uiUrlPrefix+"*", assets.Handler(embedFs, embedFsRoot, uiUrlPrefix, defaultUiUrl))
 
 	server := &http.Server{
 		Handler: router,
@@ -73,7 +74,7 @@ func main() {
 		log.Infof("Server stopped\n")
 	}()
 
-	mainWindow.Run(localHost, actualPort, uiUrlPrefix, log)
+	mainWindow.Run(localHost, ephemeralPort, uiUrlPrefix, log)
 
 	log.Infof("Server stopping\n")
 
