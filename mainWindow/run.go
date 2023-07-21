@@ -28,7 +28,7 @@ window.addEventListener("contextmenu", (event) => {
 });
 `
 
-func Run(host string, port int, uiPrefix string, log *logrus.Logger) {
+func Run(host string, port int, url string, log *logrus.Logger) {
 	log.Infof("Starting main window\n")
 
 	opts := []chromedp.ExecAllocatorOption{
@@ -54,7 +54,7 @@ func Run(host string, port int, uiPrefix string, log *logrus.Logger) {
 	defer cancel()
 
 	if err := chromedp.Run(ctx, chromedp.Tasks{
-		chromedp.Navigate(fmt.Sprintf("http://%s:%d%s", host, port, uiPrefix)),
+		chromedp.Navigate(fmt.Sprintf("http://%s:%d%s", host, port, url)),
 		chromedp.Evaluate(jsCode, nil),
 	}); err != nil {
 		log.Fatalf("chromedp.Run() failed: %s\n",
