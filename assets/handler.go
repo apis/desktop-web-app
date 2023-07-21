@@ -22,7 +22,7 @@ func Handler(resources embed.FS, urlPrefix string, resourcesRoot string) http.Ha
 
 		f, err := resources.Open(assetPath)
 		if os.IsNotExist(err) {
-			return resources.Open(defaultUrl)
+			return resources.Open(path.Join(resourcesRoot, defaultUrl))
 		}
 
 		return f, err

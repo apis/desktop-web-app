@@ -31,6 +31,7 @@ func handleGetTime() http.HandlerFunc {
 		if err != nil {
 			log.Errorf("json.Marshal() failed: %s\n",
 				fmt.Errorf("%w", err))
+			writer.WriteHeader(http.StatusInternalServerError)
 			return
 		}
 
@@ -38,6 +39,7 @@ func handleGetTime() http.HandlerFunc {
 		if err != nil {
 			log.Errorf("writer.Write() failed: %s\n",
 				fmt.Errorf("%w", err))
+			writer.WriteHeader(http.StatusInternalServerError)
 			return
 		}
 	}
