@@ -1,4 +1,4 @@
-package assets
+package staticAssets
 
 import (
 	"embed"
@@ -8,24 +8,22 @@ import (
 	"path"
 )
 
-const defaultUrl = "index.html"
-
 type pseudoFs func(name string) (fs.File, error)
 
 func (f pseudoFs) Open(name string) (fs.File, error) {
 	return f(name)
 }
 
-func Handler(resources embed.FS, urlPrefix string, resourcesRoot string) http.Handler {
+func Handler(embedFs embed.FS, embedFsRoot string, urlPrefix string, defaultUrl string) http.Handler {
 	handler := pseudoFs(func(name string) (fs.File, error) {
-		assetPath := path.Join(resourcesRoot, name)
+		assetPath := path.Join(embedFsRoot, name)
 
-		f, err := resources.Open(assetPath)
+		file, err := embedFs.Open(assetPath)
 		if os.IsNotExist(err) {
-			return resources.Open(path.Join(resourcesRoot, defaultUrl))
+			return embedFs.Open(path.Join(embedFsRoot, defaultUrl))
 		}
 
-		return f, err
+		return file, err
 	})
 
 	return http.StripPrefix(urlPrefix, http.FileServer(http.FS(handler)))
